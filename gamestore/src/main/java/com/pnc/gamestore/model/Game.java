@@ -1,9 +1,14 @@
 package com.pnc.gamestore.model;
 
+import com.pnc.gamestore.common.Classification;
+import com.pnc.gamestore.common.Genre;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 
 @Entity
@@ -13,16 +18,20 @@ public class Game {
     @Column
     public Integer id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     public String name;
 
-    @Column
-    public String genre;
+    @Column(nullable = false)
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @NotEmpty
+    @ElementCollection
+    public Set<Genre> genre;
 
-    @Column
-    public String classification;
+    @Column(nullable = false)
+    public Classification classification;
 
-    @Column(name = "game_developer")
+    @Column(name = "game_developer", nullable = false)
     public String dev;
 
     @OneToOne(mappedBy = "game")
@@ -42,7 +51,7 @@ public class Game {
     public Game() {
     }
 
-    public Game(Integer id, String name, String genre, String classification, String dev) {
+    public Game(Integer id, String name, Genre genre, Classification classification, String dev) {
         this.id = id;
         this.name = name;
         this.genre = genre;

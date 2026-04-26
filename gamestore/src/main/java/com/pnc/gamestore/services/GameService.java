@@ -23,6 +23,7 @@ public class GameService {
     }
 
     public void createGame(Game game) {
+
         gameRepository.save(game);
     }
 }

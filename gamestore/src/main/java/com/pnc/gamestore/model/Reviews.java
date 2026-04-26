@@ -15,10 +15,10 @@ public class Reviews {
     @Column(nullable = false)
     private String user;
 
-    @Column
+    @Column(nullable = false)
     private Integer rating;
 
-    @Column(length = 1000)
+    @Column(length = 1000, nullable = false)
     private String comment;
 
     @ManyToOne
