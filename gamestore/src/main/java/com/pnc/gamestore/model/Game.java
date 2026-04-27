@@ -3,10 +3,11 @@ package com.pnc.gamestore.model;
 import com.pnc.gamestore.common.Classification;
 import com.pnc.gamestore.common.Genre;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
-import java.util.ArrayList;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 
@@ -16,8 +17,10 @@ import java.util.Set;
 public class Game {
     @Id
     @Column
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer id;
 
+    @NotBlank
     @Column(nullable = false, unique = true)
     public String name;
 
@@ -28,17 +31,18 @@ public class Game {
     @ElementCollection
     public Set<Genre> genre;
 
+    @NotNull
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     public Classification classification;
 
+    @NotNull
     @Column(name = "game_developer", nullable = false)
     public String dev;
 
-    @OneToOne(mappedBy = "game")
-    public GameDetails details;
-
-    @OneToMany(mappedBy = "game")
-    public List<Reviews> reviews = new ArrayList<>();
+    @NotNull
+    @Column(nullable = false)
+    public BigDecimal price;
 
     @ManyToMany
     @JoinTable(
@@ -46,16 +50,45 @@ public class Game {
             joinColumns = @JoinColumn(name = "game_id"),
             inverseJoinColumns = @JoinColumn(name = "platform_id")
     )
-    public List<Platforms> platforms = new ArrayList<>();
+    @NotNull
+    @NotEmpty
+    public Set<Platform> platforms;
 
     public Game() {
     }
 
-    public Game(Integer id, String name, Genre genre, Classification classification, String dev) {
-        this.id = id;
+    public Game(String name, Set<Genre> genre, Classification classification, String dev) {
         this.name = name;
         this.genre = genre;
         this.classification = classification;
         this.dev = dev;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Set<Genre> getGenre() {
+        return genre;
+    }
+
+    public Classification getClassification() {
+        return classification;
+    }
+
+    public String getDev() {
+        return dev;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public Set<Platform> getPlatforms() {
+        return platforms;
     }
 }
